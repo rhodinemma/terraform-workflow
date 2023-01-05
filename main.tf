@@ -169,3 +169,10 @@ resource "aws_security_group_rule" "allow_alb_all_outbound" {
   protocol    = "-1"
   cidr_blocks = ["0.0.0.0/0"]
 }
+
+resource "aws_lb" "load_balancer" {
+    name = "web-app-lb"
+    load_balancer_type = "application"
+    subnets = data.aws_subnet_ids.default_subnet.ids
+    security_groups = [aws_security_group.alb.id]
+}
