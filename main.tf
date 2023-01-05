@@ -100,3 +100,20 @@ resource "aws_lb_listener" "http" {
     }
   }
 }
+
+resource "aws_lb_target_group" "instances" {
+  name     = "example-target-group"
+  port     = 8080
+  protocol = "HTTP"
+  vpc_id   = data.aws_vpc.default_vpc.id
+
+  health_check {
+    path                = "/"
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 15
+    timeout             = 3
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
+}
