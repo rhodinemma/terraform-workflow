@@ -129,3 +129,19 @@ resource "aws_lb_target_group_attachment" "instance_1" {
   target_id        = aws_instance.instance_2.id
   port             = 8080
 }
+
+resource "aws_lb_listener_rule" "instances" {
+  listener_arn = aws_lb_listener.http.arn
+  priority     = 100
+
+  condition {
+    path_pattern {
+      values = ["*"]
+    }
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.instances.arn
+  }
+}
