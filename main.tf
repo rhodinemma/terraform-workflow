@@ -117,3 +117,15 @@ resource "aws_lb_target_group" "instances" {
     unhealthy_threshold = 2
   }
 }
+
+resource "aws_lb_target_group_attachment" "instance_1" {
+  target_group_arn = aws_lb_target_group.instances.arn
+  target_id        = aws_instance.instance_1.id
+  port             = 8080
+}
+
+resource "aws_lb_target_group_attachment" "instance_1" {
+  target_group_arn = aws_lb_target_group.instances.arn
+  target_id        = aws_instance.instance_2.id
+  port             = 8080
+}
