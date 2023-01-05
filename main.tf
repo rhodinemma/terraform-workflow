@@ -171,12 +171,24 @@ resource "aws_security_group_rule" "allow_alb_all_outbound" {
 }
 
 resource "aws_lb" "load_balancer" {
-    name = "web-app-lb"
-    load_balancer_type = "application"
-    subnets = data.aws_subnet_ids.default_subnet.ids
-    security_groups = [aws_security_group.alb.id]
+  name               = "web-app-lb"
+  load_balancer_type = "application"
+  subnets            = data.aws_subnet_ids.default_subnet.ids
+  security_groups    = [aws_security_group.alb.id]
 }
 
 resource "aws_route53_zone" "primary" {
-    name = "tike.dev"
+  name = "tike.dev"
+}
+
+resource "aws_route53_record" "root" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = "tike.dev"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.load_balancer.dns_name
+    zone_id                = aws_lb.load_balancer.zone_id
+    evaluate_target_health = true
+  }
 }
