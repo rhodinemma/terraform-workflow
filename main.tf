@@ -124,7 +124,7 @@ resource "aws_lb_target_group_attachment" "instance_1" {
   port             = 8080
 }
 
-resource "aws_lb_target_group_attachment" "instance_1" {
+resource "aws_lb_target_group_attachment" "instance_2" {
   target_group_arn = aws_lb_target_group.instances.arn
   target_id        = aws_instance.instance_2.id
   port             = 8080
