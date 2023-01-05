@@ -176,3 +176,7 @@ resource "aws_lb" "load_balancer" {
     subnets = data.aws_subnet_ids.default_subnet.ids
     security_groups = [aws_security_group.alb.id]
 }
+
+resource "aws_route53_zone" "primary" {
+    name = "tike.dev"
+}
