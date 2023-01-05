@@ -17,8 +17,30 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_s3_bucket" "terraform_state" {
-  bucket        = "nagwere-tf-state"
+resource "aws_instance" "instance_1" {
+  ami             = "ami-011899242bb902164"
+  instance_type   = "t2.micro"
+  security_groups = [aws_security_group.instances.name]
+  user_data       = <<-EOF
+                #!/bin/bash
+                echo "Hello, world 1" > index.html
+                python3 -m http.server 8080 &
+                EOF
+}
+
+resource "aws_instance" "instance_2" {
+  ami             = "ami-011899242bb902164"
+  instance_type   = "t2.micro"
+  security_groups = [aws_security_group.instances.name]
+  user_data       = <<-EOF
+                #!/bin/bash
+                echo "Hello, world 2" > index.html
+                python3 -m http.server 8080 &
+                EOF
+}
+
+resource "aws_s3_bucket" "bucket" {
+  bucket        = "nagwere-webapp-data"
   force_destroy = true
 }
 
@@ -37,14 +59,3 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state_c
     }
   }
 }
-
-resource "aws_dynamodb_table" "terraform_locks" {
-  name         = "terraform-state-locking"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "LockID"
-  attribute {
-    name = "LockID"
-    type = "S"
-  }
-}
-
