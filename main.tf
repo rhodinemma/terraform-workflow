@@ -13,6 +13,7 @@ terraform {
     }
   }
 }
+
 provider "aws" {
   region = "us-east-1"
 }
@@ -22,10 +23,10 @@ resource "aws_instance" "instance_1" {
   instance_type   = "t2.micro"
   security_groups = [aws_security_group.instances.name]
   user_data       = <<-EOF
-                #!/bin/bash
-                echo "Hello, world 1" > index.html
-                python3 -m http.server 8080 &
-                EOF
+              #!/bin/bash
+              echo "Hello, world 1" > index.html
+              python3 -m http.server 8080 &
+              EOF
 }
 
 resource "aws_instance" "instance_2" {
@@ -33,10 +34,10 @@ resource "aws_instance" "instance_2" {
   instance_type   = "t2.micro"
   security_groups = [aws_security_group.instances.name]
   user_data       = <<-EOF
-                #!/bin/bash
-                echo "Hello, world 2" > index.html
-                python3 -m http.server 8080 &
-                EOF
+              #!/bin/bash
+              echo "Hello, world 2" > index.html
+              python3 -m http.server 8080 &
+              EOF
 }
 
 resource "aws_s3_bucket" "bucket" {
