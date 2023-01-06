@@ -15,48 +15,43 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.region
 }
 
 resource "aws_instance" "instance_1" {
-  ami             = "ami-011899242bb902164"
-  instance_type   = "t2.micro"
+  ami             = var.ami
+  instance_type   = var.instance_type
   security_groups = [aws_security_group.instances.name]
   user_data       = <<-EOF
               #!/bin/bash
-              echo "Hello, world 1" > index.html
+              echo "Hello, World 1" > index.html
               python3 -m http.server 8080 &
               EOF
 }
 
 resource "aws_instance" "instance_2" {
-  ami             = "ami-011899242bb902164"
-  instance_type   = "t2.micro"
+  ami             = var.ami
+  instance_type   = var.instance_type
   security_groups = [aws_security_group.instances.name]
   user_data       = <<-EOF
               #!/bin/bash
-              echo "Hello, world 2" > index.html
+              echo "Hello, World 2" > index.html
               python3 -m http.server 8080 &
               EOF
 }
 
 resource "aws_s3_bucket" "bucket" {
-  bucket        = "nagwere-webapp-data"
+  bucket        = var.bucket_name
   force_destroy = true
-}
-
-resource "aws_s3_bucket_versioning" "bucket_versioning" {
-  bucket = aws_s3_bucket.bucket.id
-  versioning_configuration {
-    status = "Enabled"
+  versioning {
+    enabled = true
   }
-}
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state_crypto_conf" {
-  bucket = aws_s3_bucket.bucket.bucket
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
     }
   }
 }
@@ -147,6 +142,7 @@ resource "aws_lb_listener_rule" "instances" {
   }
 }
 
+
 resource "aws_security_group" "alb" {
   name = "alb-security-group"
 }
@@ -159,6 +155,7 @@ resource "aws_security_group_rule" "allow_alb_http_inbound" {
   to_port     = 80
   protocol    = "tcp"
   cidr_blocks = ["0.0.0.0/0"]
+
 }
 
 resource "aws_security_group_rule" "allow_alb_all_outbound" {
@@ -169,22 +166,25 @@ resource "aws_security_group_rule" "allow_alb_all_outbound" {
   to_port     = 0
   protocol    = "-1"
   cidr_blocks = ["0.0.0.0/0"]
+
 }
+
 
 resource "aws_lb" "load_balancer" {
   name               = "web-app-lb"
   load_balancer_type = "application"
   subnets            = data.aws_subnet_ids.default_subnet.ids
   security_groups    = [aws_security_group.alb.id]
+
 }
 
 resource "aws_route53_zone" "primary" {
-  name = "tike.dev"
+  name = var.domain
 }
 
 resource "aws_route53_record" "root" {
   zone_id = aws_route53_zone.primary.zone_id
-  name    = "tike.dev"
+  name    = var.domain
   type    = "A"
 
   alias {
@@ -195,18 +195,13 @@ resource "aws_route53_record" "root" {
 }
 
 resource "aws_db_instance" "db_instance" {
-  allocated_storage = 20
-  # This allows any minor version within the major engine_version
-  # defined below, but will also result in allowing AWS to auto
-  # upgrade the minor version of your DB. This may be too risky
-  # in a real production environment.
-  auto_minor_version_upgrade = true
-  storage_type               = "standard"
-  engine                     = "postgres"
-  engine_version             = "12"
-  instance_class             = "db.t2.micro"
-  name                       = "mydb"
-  username                   = var.db_user
-  password                   = var.db_pass
-  skip_final_snapshot        = true
+  allocated_storage   = 20
+  storage_type        = "standard"
+  engine              = "postgres"
+  engine_version      = "12.5"
+  instance_class      = "db.t2.micro"
+  name                = var.db_name
+  username            = var.db_user
+  password            = var.db_pass
+  skip_final_snapshot = true
 }
