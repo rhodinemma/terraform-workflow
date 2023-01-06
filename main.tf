@@ -206,7 +206,7 @@ resource "aws_db_instance" "db_instance" {
   engine_version             = "12"
   instance_class             = "db.t2.micro"
   name                       = "mydb"
-  username                   = "foo"
-  password                   = "foobarbaz"
+  username                   = var.db_user
+  password                   = var.db_pass
   skip_final_snapshot        = true
 }
