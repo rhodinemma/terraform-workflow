@@ -18,6 +18,10 @@ provider "aws" {
   region = "us-east-1"
 }
 
+locals {
+  environment_name = "staging"
+}
+
 module "web_app" {
   source = "../../web-app/my-module"
 
