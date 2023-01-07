@@ -4,7 +4,7 @@ resource "aws_route53_zone" "primary" {
 
   lifecycle {
     ignore_changes = [
-      all
+      name
     ]
   }
 }
