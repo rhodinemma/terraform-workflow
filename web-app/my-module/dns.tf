@@ -3,9 +3,7 @@ resource "aws_route53_zone" "primary" {
   name  = var.domain
 
   lifecycle {
-    ignore_changes = [
-      all,
-    ]
+     ignore_changes = true
   }
 }
 
