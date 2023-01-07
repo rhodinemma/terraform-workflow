@@ -30,7 +30,7 @@ module "web_app_1" {
   create_dns_zone  = true
   db_name          = "webapp1db"
   db_user          = "foo"
-  db_pass          = "foorbars"
+  db_pass          = "foobazs"
 }
 
 module "web_app_2" {
@@ -45,5 +45,5 @@ module "web_app_2" {
   create_dns_zone  = true
   db_name          = "webapp2db"
   db_user          = "bar"
-  db_pass          = "foobar"
+  db_pass          = "foobars"
 }
