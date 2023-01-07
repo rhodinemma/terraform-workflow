@@ -27,16 +27,11 @@ jobs:
         with:
           terraform_version: 1.0.1
           terraform_wrapper: false
+          cli_config_credentials_token: ${{ secrets.TERRAFORM_LOGIN }}
 
       - name: Terraform Format
         id: fmt
         run: terraform fmt -check
-
-      - name: Terraform Login
-        id: login
-        run: terraform login
-        env:
-          terraform_login: ${{ secrets.TERRAFORM_LOGIN }}
 
       - name: Terraform Init
         id: init
