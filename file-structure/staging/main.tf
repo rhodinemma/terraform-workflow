@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 module "web_app" {
-  source = "../../web-app/my-module"
+  source = "web-app/my-module"
 
   # Input Variables
   bucket_name      = "rhodin-web-app-data-${local.environment_name}"
