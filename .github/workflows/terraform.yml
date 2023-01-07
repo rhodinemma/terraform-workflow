@@ -81,14 +81,14 @@ jobs:
         working-directory: file-structure/global
         run: |
           terraform init
-          terraform apply -auto-approve
+          terraform apply -lock=false -auto-approve
       - name: Terraform Apply Staging
         if: steps.check-tag.outputs.environment == 'staging' && github.event_name == 'push'
-        run: terraform apply -auto-approve
+        run: terraform apply -lock=false -auto-approve
 
       - name: Terraform Apply Production
         if: steps.check-tag.outputs.environment == 'production' && github.event_name == 'release'
         working-directory: file-structure/production
         run: |
           terraform init
-          terraform apply -auto-approve
+          terraform apply -lock=false -auto-approve
