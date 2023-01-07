@@ -1,6 +1,12 @@
 resource "aws_route53_zone" "primary" {
   count = var.create_dns_zone ? 1 : 0
   name  = var.domain
+
+  lifecycle {
+    ignore_changes = [
+      all,
+    ]
+  }
 }
 
 data "aws_route53_zone" "primary" {
