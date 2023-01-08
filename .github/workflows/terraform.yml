@@ -41,7 +41,7 @@ jobs:
         id: plan
         if: github.event_name == 'pull_request'
         # Route 53 zone must already exist for this to succeed!
-        run: terraform plan -no-color
+        run: terraform plan -lock=false -no-color
         continue-on-error: true
 
       - uses: actions/github-script@0.9.0
