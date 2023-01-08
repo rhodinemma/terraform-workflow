@@ -21,9 +21,12 @@ provider "aws" {
 # Route53 zone is shared across staging and production
 resource "aws_route53_zone" "primary" {
   name = "devopsdeployed.com"
+
+  tags = {
+    Name          = "hosted-zone"
+    Drift_example = "v1"
+  }
   lifecycle {
-    ignore_changes = [
-      name
-    ]
+    ignore_changes = [tags]
   }
 }
