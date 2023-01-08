@@ -1,7 +1,7 @@
 # General Variables
 
 variable "region" {
-  description = "Default region for provider"
+  description = "Default region for providers"
   type        = string
   default     = "us-east-1"
 }
