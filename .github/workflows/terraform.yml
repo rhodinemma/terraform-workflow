@@ -41,7 +41,7 @@ jobs:
         id: plan
         if: github.event_name == 'pull_request'
         # Route 53 zone must already exist for this to succeed!
-        run: terraform plan -lock=false -no-color
+        run: terraform plan -no-color
         continue-on-error: true
 
       - uses: actions/github-script@0.9.0
@@ -81,14 +81,14 @@ jobs:
         working-directory: file-structure/global
         run: |
           terraform init
-          terraform apply -lock=false -auto-approve
+          terraform apply -auto-approve
       - name: Terraform Apply Staging
         if: steps.check-tag.outputs.environment == 'staging' && github.event_name == 'push'
-        run: terraform apply -lock=false -auto-approve
+        run: terraform apply -auto-approve
 
       - name: Terraform Apply Production
         if: steps.check-tag.outputs.environment == 'production' && github.event_name == 'release'
         working-directory: file-structure/production
         run: |
           terraform init
-          terraform apply -lock=false -auto-approve
+          terraform apply -auto-approve
