@@ -30,5 +30,5 @@ module "web_app" {
   domain           = "devopsdeployed.com"
   environment_name = local.environment_name
   instance_type    = "t2.small"
-  create_dns_zone  = false
+  create_dns_zone  = true
 }
