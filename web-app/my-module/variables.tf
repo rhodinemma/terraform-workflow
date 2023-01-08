@@ -7,7 +7,7 @@ variable "region" {
 }
 
 variable "app_name" {
-  description = "Name of the web application"
+  description = "Name of the web applications"
   type        = string
   default     = "web-app"
 }
