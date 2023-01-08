@@ -44,7 +44,7 @@ variable "bucket_name" {
 variable "create_dns_zone" {
   description = "If true, create new route53 zone, if false read existing route53 zone"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "domain" {
