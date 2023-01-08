@@ -22,11 +22,7 @@ provider "aws" {
 resource "aws_route53_zone" "primary" {
   name = "devopsdeployed.com"
 
-  tags = {
-    Name          = "hosted-zone"
-    Drift_example = "v1"
-  }
   lifecycle {
-    ignore_changes = [tags]
+    prevent_destroy = true
   }
 }
